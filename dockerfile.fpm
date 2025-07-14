@@ -1,0 +1,20 @@
+FROM phpdockerio/php:8.3-fpm
+
+ARG DEBIAN_FRONTEND=noninteractive
+
+# Install selected extensions and other stuff
+RUN apt-get update \
+    && apt-get -y --no-install-recommends install  php8.3-xdebug php8.3-bcmath php8.3-mongodb php8.3-gd git \
+    && apt-get clean; rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /usr/share/doc/*
+
+COPY ./app /app
+COPY ./devops/php/overrides.conf /etc/php/8.3/fpm/pool.d/z-overrides.conf
+COPY ./devops/php/php-ini-overrides.ini /etc/php/8.3/fpm/conf.d/99-overrides.ini
+
+# Install Composer
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+RUN cd /app && composer install && \
+    cp .env.example .env && \
+    php artisan storage:link &&  \
+    php artisan key:generate && \
+    chmod -R 777 /app

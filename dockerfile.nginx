@@ -1,0 +1,4 @@
+FROM nginx:latest
+
+COPY ./app /app
+COPY ./devops/nginx/nginx.conf /etc/nginx/conf.d/nginx.conf
