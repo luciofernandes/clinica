@@ -28,6 +28,9 @@ WORKDIR /app
 # Copia o conteúdo real do Laravel
 COPY ./app/ .
 
+# 🔧 Instala dependências do PHP (Laravel)
+RUN composer install --no-dev --optimize-autoloader
+
 # Copia o script de entrada
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
