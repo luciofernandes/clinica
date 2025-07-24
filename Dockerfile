@@ -1,6 +1,6 @@
-FROM php:8.2-fpm-bullseye
+FROM php:8.3-fpm-bullseye
 
-# Install PHP extensions and dependencies
+# Instala dependências do sistema
 RUN apt-get update && apt-get install -y \
     git \
     curl \
@@ -9,29 +9,30 @@ RUN apt-get update && apt-get install -y \
     libzip-dev \
     libonig-dev \
     libxml2-dev \
-    libpq-dev \
     libpng-dev \
     libjpeg-dev \
     libfreetype6-dev \
-    gnupg \
     && docker-php-ext-configure zip \
     && docker-php-ext-install pdo_mysql zip mbstring exif pcntl
 
-# Instala Node.js 20
-RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - && \
-    apt-get install -y nodejs
+# Instala Node.js 20.x
+RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
+    && apt-get install -y nodejs
 
-# Confirma instalação
-RUN node -v && npm -v
-
-# Copy Composer from the official image
+# Instala Composer
 COPY --from=composer:2.6 /usr/bin/composer /usr/bin/composer
 
-# Set working directory
-WORKDIR /var/www
+# Define diretório de trabalho
+WORKDIR /app
 
-# Expose port
-EXPOSE 9000
+# Copia projeto
+COPY . .
 
-# Start PHP-FPM
-CMD ["php-fpm"]
+# Copia o entrypoint personalizado
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
+ENTRYPOINT ["/entrypoint.sh"]
+
+# Comando padrão do container (Render espera que você exponha algo na 8000)
+CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=8000"]
