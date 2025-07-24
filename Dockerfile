@@ -25,14 +25,13 @@ COPY --from=composer:2.6 /usr/bin/composer /usr/bin/composer
 # Define diretório de trabalho
 WORKDIR /app
 
-# Copia projeto
-COPY . .
+# Copia o conteúdo real do Laravel
+COPY ./app/ .
 
-# Copia o entrypoint personalizado
+# Copia o script de entrada
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
 ENTRYPOINT ["/entrypoint.sh"]
 
-# Comando padrão do container (Render espera que você exponha algo na 8000)
 CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=8000"]
