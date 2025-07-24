@@ -2,8 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\HealthPlan;
+use App\Models\Modality;
+use App\Models\Patient;
 use Illuminate\Http\Request;
 use App\Models\Authorization;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class AuthorizationController extends Controller
 {
@@ -76,27 +80,73 @@ class AuthorizationController extends Controller
 
         return redirect()->route('autorizacoes.index')->with('status', 'Autorização criada com sucesso!');
     }
-    public function index()
-    {
-        $authorizations = \App\Models\Authorization::with('patient')->latest()->paginate(10);
-        return view('authorizations.index', compact('authorizations'));
+    public function index(Request $request)    {
+
+        $statusFiltro = $request->input('status');
+        $perPage = 10;
+        $currentPage = LengthAwarePaginator::resolveCurrentPage();
+
+        $query = \App\Models\Authorization::with(['modalities', 'invoices', 'patient', 'healthPlan']);
+
+        // 🔍 Filtro por paciente
+        if ($request->filled('paciente')) {
+            $query->whereHas('patient', function ($q) use ($request) {
+                $q->where('name', 'like', '%' . $request->paciente . '%');
+            });
+        }
+
+        // 🏥 Filtro por plano de saúde
+        if ($request->filled('plano')) {
+            $query->whereHas('healthPlan', function ($q) use ($request) {
+                $q->where('name', 'like', '%' . $request->plano . '%');
+            });
+        }
+
+        // Executa a query base (paciente + plano)
+        $results = $query->get();
+
+        // 🧠 Filtro por billing_status (aplicado em Collection)
+        $filtered = $results->filter(function ($auth) use ($statusFiltro) {
+            return !$statusFiltro || $auth->billing_status === $statusFiltro;
+        });
+
+        // Paginação manual
+        $authorizations = new LengthAwarePaginator(
+            $filtered->forPage($currentPage, $perPage),
+            $filtered->count(),
+            $perPage,
+            $currentPage,
+            ['path' => $request->url(), 'query' => $request->query()]
+        );
+        $healthPlans = HealthPlan::orderBy('name')->get();
+
+
+        return view('authorizations.index', compact('authorizations','healthPlans'));
+
+
     }
 
     public function show($id)
     {
-        $authorization = Authorization::with(['patient', 'modalities.modality', 'files', 'healthPlan'])->findOrFail($id);
+        $authorization = Authorization::with([
+            'patient',
+            'healthPlan',
+            'modalities.modality',
+            'invoices'
+        ])->findOrFail($id);
+
         return view('authorizations.show', compact('authorization'));
     }
     public function edit($id)
     {
-        $authorization = \App\Models\Authorization::with('modalities')->findOrFail($id);
-        $patients = \App\Models\Patient::orderBy('name')->get();
-        $modalities = \App\Models\Modality::orderBy('name')->get();
+        $authorization = Authorization::with(['modalities', 'files'])->findOrFail($id);
+        $patients = Patient::orderBy('name')->get();
+        $modalities = Modality::orderBy('name')->get();
+        $healthPlans = HealthPlan::orderBy('name')->get();
 
-        $healthPlans = \App\Models\HealthPlan::orderBy('name')->get();
-        return view('authorizations.create', compact('authorization', 'patients', 'modalities', 'healthPlans'));
-
+        return view('authorizations.edit', compact('authorization', 'patients', 'modalities', 'healthPlans'));
     }
+
 
     public function update(Request $request, $id)
     {

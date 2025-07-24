@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Authorization;
 use App\Models\Invoice;
 use Illuminate\Support\Facades\DB;
 
@@ -10,7 +11,7 @@ class DashboardController extends Controller
     public function financeiro()
     {
         $totalCobrado = Invoice::sum('amount');
-
+        $totalAutorizacoes = Authorization::count();
         $totalRecebido = Invoice::where('status', 'recebido')->sum('amount');
 
         $totalPendente = Invoice::whereIn('status', ['pendente', 'enviado', 'pago'])->sum('amount');
@@ -28,7 +29,8 @@ class DashboardController extends Controller
             'totalRecebido',
             'totalPendente',
             'totalNotas',
-            'totalPacientesComCobrança'
+            'totalPacientesComCobrança',
+            'totalAutorizacoes'
         ));
     }
 }

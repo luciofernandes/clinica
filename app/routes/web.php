@@ -40,8 +40,17 @@ Route::middleware('auth')->group(function () {
     Route::put('/cobrancas/{invoice}', [InvoiceController::class, 'update'])->name('cobrancas.update');
     Route::delete('/cobrancas/{invoice}', [InvoiceController::class, 'destroy'])->name('cobrancas.destroy');
     Route::get('/cobrancas/autorizar', [\App\Http\Controllers\AuthorizationController::class, 'listarParaCobranca'])->name('cobrancas.autorizar');
+    Route::get('/cobrancas/{invoice}/editar', [InvoiceController::class, 'edit'])->name('cobrancas.edit');
+    Route::put('/cobrancas/{invoice}', [InvoiceController::class, 'update'])->name('cobrancas.update');
+
 
     // 📊 Relatórios e Dashboards
     Route::get('/cobrancas/resumo', [BillingSummaryController::class, 'index'])->name('cobrancas.resumo');
     Route::get('/dashboard/financeiro', [DashboardController::class, 'financeiro'])->name('dashboard.financeiro');
+
+    Route::get('/usuarios', [\App\Http\Controllers\UserController::class, 'index'])->name('user.index');
+    Route::get('/usuarios/create', [\App\Http\Controllers\UserController::class, 'create'])->name('user.create');
+    Route::post('/usuarios ', [\App\Http\Controllers\UserController::class, 'store'])->name('user .store');
+    Route::delete('/usuarios/{user}/destroy', [\App\Http\Controllers\UserController::class, 'destroy'])->name('user.destroy');
+
 });

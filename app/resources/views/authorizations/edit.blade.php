@@ -33,18 +33,22 @@
     <form action="{{ route('autorizacoes.update', $authorization->id) }}" method="POST" enctype="multipart/form-data">
         @csrf
         @method('PUT')
-
+        <div class="form-group">
+            <a href="{{ route('autorizacoes.index') }}" class="btn btn-secondary mb-3">← Voltar</a>
+        </div>
         {{-- Paciente --}}
         <div class="form-group">
             <label for="patient_id">Paciente</label>
             <select name="patient_id" class="form-control" required>
                 <option value="">Selecione...</option>
                 @foreach($patients as $patient)
-                    <option value="{{ $patient->id }}" {{ $patient->id == old('patient_id', $authorization->patient_id) ? 'selected' : '' }}>
+                    <option value="{{ $patient->id }}"
+                        {{ old('patient_id', $authorization->patient_id) == $patient->id ? 'selected' : '' }}>
                         {{ $patient->name }} ({{ $patient->cpf }})
                     </option>
                 @endforeach
             </select>
+
         </div>
 
         {{-- Plano --}}

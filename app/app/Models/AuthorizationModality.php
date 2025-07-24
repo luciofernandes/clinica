@@ -16,5 +16,9 @@ class AuthorizationModality extends Model
         'created_by',
         'updated_by',
     ];
+    public function modality()
+    {
+        return $this->belongsTo(\App\Models\Modality::class);
+    }
 
 }

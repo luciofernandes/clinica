@@ -28,7 +28,6 @@
                     <option value="pendente">Pendente</option>
                     <option value="enviado">Enviado</option>
                     <option value="pago">Pago</option>
-                    <option value="recebido">Recebido</option>
                 </select>
             </div>
             <div class="col-md-3">
@@ -70,15 +69,25 @@
                     </form>
                 </td>
                 <td>{{ \Carbon\Carbon::parse($invoice->issue_date)->format('d/m/Y') }}</td>
-                <td>
-                    <form method="POST" action="{{ route('cobrancas.destroy', $invoice->id) }}" onsubmit="return confirm('Excluir essa NF?')">
-                        @csrf
-                        @method('DELETE')
-                        <button class="btn btn-danger btn-sm">Remover</button>
-                    </form>
+                <td class="text-nowrap">
+                @if($invoice->status !== 'pago')
+                        <a href="{{ route('cobrancas.edit', $authorization->id) }}"
+                           class="btn btn-sm btn-warning"
+                           title="Editar">
+                            <i class="fas fa-edit"></i>
+                        </a>
+
+                        <form method="POST" action="{{ route('cobrancas.destroy', $invoice->id) }}"       style="display:inline-block;" onsubmit="return confirm('Excluir essa NF?')">
+                            @csrf
+                            @method('DELETE')
+                            <button class="btn btn-sm btn-danger" title="Excluir">
+                                <i class="fas fa-trash-alt"></i>
+                            </button>
+                        </form>
+                    @endif
                 </td>
             </tr>
-        @endforeach
-        </tbody>
-    </table>
+@endforeach
+</tbody>
+</table>
 @endsection

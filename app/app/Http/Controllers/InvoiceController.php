@@ -6,8 +6,10 @@ use App\Models\Authorization;
 use App\Models\Invoice;
 use Illuminate\Http\Request;
 
+
 class InvoiceController extends Controller
 {
+
     public function index(Authorization $authorization)
     {
         $invoices = $authorization->invoices()->orderByDesc('issue_date')->get();
@@ -36,21 +38,6 @@ class InvoiceController extends Controller
         return back()->with('status', 'Nota fiscal adicionada com sucesso.');
     }
 
-    public function update(Request $request, Invoice $invoice)
-    {
-        $request->validate([
-            'status' => 'required|in:pendente,enviado,pago,recebido',
-            'amount' => 'nullable|numeric',
-        ]);
-
-        $invoice->update([
-            'status' => $request->status,
-            'amount' => $request->amount ?? $invoice->amount,
-            'updated_by' => auth()->id(),
-        ]);
-
-        return back()->with('status', 'Cobrança atualizada.');
-    }
 
     public function destroy(Invoice $invoice)
     {
@@ -58,4 +45,33 @@ class InvoiceController extends Controller
 
         return back()->with('status', 'Nota fiscal removida.');
     }
+
+    public function edit(Invoice $invoice)
+    {
+        return view('invoices.edit', compact('invoice'));
+    }
+
+    public function update(Request $request, Invoice $invoice)
+    {
+        $rules = [
+            'status' => 'required|in:pendente,enviado,pago,recebido',
+        ];
+
+        if ($request->status === 'pago') {
+            $rules['payment_date'] = 'required|date';
+        }
+
+        $request->validate($rules);
+
+        $invoice->update([
+            'status' => $request->status,
+            'payment_date' => $request->status === 'pago' ? $request->payment_date : null,
+            'updated_by' => auth()->id(),
+        ]);
+
+        return redirect()
+            ->route('cobrancas.index', $invoice->authorization_id)
+            ->with('status', 'Cobrança atualizada com sucesso.');
+    }
+
 }
