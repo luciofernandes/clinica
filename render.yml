@@ -1,13 +1,10 @@
 services:
   - type: web
-    name: metakids
+    name: metalife
     env: docker
     plan: free
     repo: https://github.com/luciofernandes/clinica
     dockerfilePath: ./Dockerfile
-    disk:
-      name: uploads
-      mountPath: /app/storage/app/public
     envVars:
       - key: APP_ENV
         value: production
