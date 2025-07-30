@@ -30,7 +30,7 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            cd /home/ubuntu/clinica
+            cd /home/ubuntu/clinica/app
             composer install --no-dev --optimize-autoloader
             php artisan migrate --force
             php artisan config:clear
