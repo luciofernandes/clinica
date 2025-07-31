@@ -21,32 +21,32 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
+            cd /home/ubuntu/clinica/app
+          
+            echo "🔐 Garantindo permissões desde o início..."
+            sudo mkdir -p storage/logs bootstrap/cache
+            sudo chmod -R 775 storage bootstrap/cache
+            sudo chown -R www-data:www-data storage bootstrap/cache
+            sudo touch storage/logs/laravel.log
+          
             echo "🔄 Pulling latest changes..."
-            cd /home/ubuntu/clinica
             git pull origin main
-
-            echo "📂 Garantindo diretórios..."
-            mkdir -p storage/logs bootstrap/cache
-
-            echo "📦 Instalando dependências do Composer..."
-            composer install --no-interaction --prefer-dist --optimize-autoloader
-
-            echo "🔐 Corrigindo permissões de storage e cache..."
-            chmod -R 775 storage bootstrap/cache
-            chown -R www-data:www-data storage bootstrap/cache
-
+          
+            echo "📦 Installing Composer dependencies..."
+            composer install --no-dev --optimize-autoloader
+          
             echo "⚙️ Limpando caches antigos..."
             php artisan config:clear
             php artisan cache:clear
             php artisan view:clear
             php artisan route:clear
-
+          
             echo "⚙️ Gerando caches otimizados..."
             php artisan config:cache
             php artisan route:cache
             php artisan view:cache
-
-            echo "♻️ Reiniciando PHP-FPM..."
-            sudo systemctl reload php8.1-fpm
-
+          
+            echo "♻️ Reloading PHP-FPM..."
+            sudo systemctl reload php8.3-fpm
+          
             echo "✅ Deploy finalizado com sucesso."
