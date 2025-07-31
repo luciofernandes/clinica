@@ -24,7 +24,11 @@ jobs:
 
             echo "🔄 Pulling latest changes..."
             git pull origin main
-
+            
+            echo "📂 Garantindo diretórios..."
+            sudo mkdir -p storage/logs
+            touch storage/logs/laravel.log
+  
             echo "📦 Installing Composer dependencies..."
             composer install --no-dev --optimize-autoloader
 
@@ -35,8 +39,8 @@ jobs:
             php artisan route:clear
 
             echo "🔐 Setting permissions..."
-            chmod -R 775 storage bootstrap/cache
-            chown -R www-data:www-data storage bootstrap/cache
+            sudo chmod -R 775 storage bootstrap/cache
+            sudo chown -R www-data:www-data storage bootstrap/cache
 
             echo "♻️ Reloading PHP-FPM..."
             sudo systemctl reload php8.3-fpm
