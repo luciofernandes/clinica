@@ -24,35 +24,38 @@ jobs:
           script: |
             echo "📁 Acessando diretório do projeto..."
             cd /home/ubuntu/clinica/app
-            
-            echo "🔄 Pulling latest changes..."
-            git pull origin main
-            
-            echo "🔐 Corrigindo permissões antes de tudo..."
-            sudo mkdir -p storage/logs bootstrap/cache storage/framework/views
+
+            echo "🔐 Garantindo diretórios e permissões corretas..."
+            sudo rm -rf bootstrap/cache/*
+            sudo rm -rf storage/logs/*
+            sudo mkdir -p bootstrap/cache storage/logs storage/framework/views
             sudo touch storage/logs/laravel.log
+
             sudo chown -R www-data:www-data storage bootstrap/cache
             sudo chmod -R 775 storage bootstrap/cache storage/logs storage/framework
-            
+
+            echo "🔄 Pulling latest changes do Git..."
+            git pull origin main
+
             echo "📦 Instalando dependências do Composer..."
             composer install --no-dev --optimize-autoloader
-            
+
             echo "⚙️ Limpando caches antigos..."
             php artisan config:clear
             php artisan route:clear
             php artisan view:clear
             php artisan cache:clear
-            
+
             echo "⚙️ Gerando caches otimizados..."
             php artisan config:cache
             php artisan route:cache
             php artisan view:cache
-            
-            echo "🔒 Corrigindo permissões finais..."
+
+            echo "🔒 Permissões finais para produção..."
             sudo chown -R www-data:www-data storage bootstrap/cache
             sudo chmod -R 775 storage bootstrap/cache
-            
+
             echo "♻️ Reiniciando PHP-FPM..."
             sudo systemctl reload php8.3-fpm
-            
+
             echo "✅ Deploy finalizado com sucesso."
