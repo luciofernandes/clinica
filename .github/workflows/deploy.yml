@@ -29,8 +29,9 @@ jobs:
             echo "🔐 Corrigindo permissões antes de tudo..."
             sudo mkdir -p storage/logs bootstrap/cache storage/framework/views
             sudo touch storage/logs/laravel.log
-            sudo chown -R www-data:www-data storage bootstrap/cache storage/logs storage/framework
-            sudo chmod -R ug+rwX,o-rwx storage bootstrap/cache storage/logs storage/framework
+            sudo chown -R www-data:www-data .
+            sudo chmod -R ug+rwX,o-rwx .
+
 
             echo "🔄 Pulling latest changes do Git..."
             git pull origin main
