@@ -83,11 +83,6 @@
                    value="{{ old('authorization_expiration_date', $authorization->authorization_expiration_date ?? '') }}">
         </div>
 
-        {{-- Link da matrícula externa --}}
-        <div class="form-group">
-            <label for="external_enrollment_link">Link da Matrícula (outro sistema)</label>
-            <input type="url" name="external_enrollment_link" class="form-control" value="{{ old('external_enrollment_link', $authorization->external_enrollment_link) }}">
-        </div>
 
         {{-- Data prevista última sessão --}}
         <div class="form-group">
@@ -133,6 +128,30 @@
                             <label>Valor Total</label>
                             <input type="number" name="modalities[{{ $index }}][total_value]" step="0.01" class="form-control" value="{{ $modality->total_value }}">
                         </div>
+                        {{-- Matrícula ID --}}
+                        <div class="form-group">
+                            <label>ID da Matrícula</label>
+                            <input type="text" name="modalities[{{ $index }}][matricula_id]"
+                                   class="form-control"
+                                   value="{{ old("modalities.$index.matricula_id", $modality->matricula_id) }}">
+                        </div>
+                        <div class="form-group">
+                            <label>Matricula</label>
+
+                        @if ($modality->matricula_id)
+                                <a href="https://painel.softwarepilates.com.br/Matricula/Matricula.aspx?c={{ $modality->matricula_id }}"
+                                   class="form-control btn btn-sm btn-info" target="_blank">
+                                    Ver/Editar Matrícula
+                                </a>
+                            @else
+                                <a href="https://painel.softwarepilates.com.br/Matricula/Matricula.aspx"
+                                   class="form-control btn btn-sm btn-primary" target="_blank">
+                                    Criar Matrícula
+                                </a>
+                            @endif
+                        </div>
+                        {{-- ID oculto da modalidade para o update --}}
+                        <input type="hidden" name="modalities[{{ $index }}][id]" value="{{ $modality->id }}">
                     </div>
                 </div>
             @endforeach
