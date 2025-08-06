@@ -32,12 +32,14 @@ jobs:
             sudo chown -R www-data:www-data .
             sudo chmod -R ug+rwX,o-rwx .
 
-
             echo "🔄 Pulling latest changes do Git..."
             git pull origin main
 
             echo "📦 Instalando dependências do Composer..."
             sudo -u www-data composer install --no-dev --optimize-autoloader
+
+            echo "🛠️ Executando migrations..."
+            sudo -u www-data php artisan migrate --force
 
             echo "⚙️ Limpando caches antigos..."
             sudo -u www-data php artisan config:clear
