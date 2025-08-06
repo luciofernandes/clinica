@@ -40,6 +40,9 @@ jobs:
 
             echo "🛠️ Executando migrations..."
             sudo -u www-data php artisan migrate --force
+  
+            echo "🌱 Executando seeders..."
+            sudo -u www-data php artisan db:seed --force
 
             echo "⚙️ Limpando caches antigos..."
             sudo -u www-data php artisan config:clear
