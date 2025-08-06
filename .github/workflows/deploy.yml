@@ -36,7 +36,7 @@ jobs:
             git pull origin main
 
             echo "📦 Instalando dependências do Composer..."
-            sudo -u www-data composer install --no-dev --optimize-autoloader
+            sudo -u www-data composer install --optimize-autoloader
 
             echo "🛠️ Executando migrations..."
             sudo -u www-data php artisan migrate --force
