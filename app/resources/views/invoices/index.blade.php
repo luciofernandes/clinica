@@ -7,9 +7,16 @@
 @endsection
 
 @section('content')
-    @if(session('status'))
-        <div class="alert alert-success">{{ session('status') }}</div>
+    @if ($errors->any())
+        <div class="alert alert-danger">
+            <ul class="mb-0">
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
     @endif
+
 
     <a href="{{ route('autorizacoes.index') }}" class="btn btn-secondary mb-3">← Voltar</a>
 
@@ -18,25 +25,35 @@
         @csrf
         <div class="row">
             <div class="col-md-3">
-                <input type="text" name="invoice_number" placeholder="Número da NF" class="form-control" required>
+                <input type="text" class="form-control" name="invoice_number" placeholder="Número da NF">
             </div>
             <div class="col-md-2">
-                <input type="number" step="0.01" name="amount" placeholder="Valor" class="form-control" required>
+                <input type="number" step="0.01" class="form-control" name="amount" placeholder="Valor">
             </div>
             <div class="col-md-2">
-                <select name="status" class="form-control">
-                    <option value="pendente">Pendente</option>
-                    <option value="enviado">Enviado</option>
-                    <option value="pago">Pago</option>
-                </select>
-            </div>
-            <div class="col-md-3">
-                <input type="date" name="issue_date" class="form-control" required>
+                <input type="date" class="form-control" name="issue_date">
             </div>
             <div class="col-md-2">
-                <button class="btn btn-primary">+ Adicionar NF</button>
+                <button type="submit" class="btn btn-primary w-100">+ Adicionar NF</button>
             </div>
         </div>
+
+        <div class="row mt-3">
+            <div class="col-md-12">
+                <label><strong>Modalidades incluídas na NF:</strong></label>
+                <div class="d-flex flex-wrap">
+                    @foreach ($authorization->modalities as $modality)
+                        <div class="form-check me-4">
+                            <input class="form-check-input" type="checkbox" name="authorization_modality_ids[]" value="{{ $modality->id }}" id="modality{{ $modality->id }}">
+                            <label class="form-check-label" for="modality{{ $modality->id }}">
+                                {{ $modality->modality->name }} - {{ $modality->quantity }} {{ $modality->quantity_type }}
+                            </label>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+        </div>
+
     </form>
 
     <hr>
@@ -49,6 +66,7 @@
             <th>Valor</th>
             <th>Status</th>
             <th>Data</th>
+            <th>Modalidades</th>
             <th>Ações</th>
         </tr>
         </thead>
@@ -69,6 +87,20 @@
                     </form>
                 </td>
                 <td>{{ \Carbon\Carbon::parse($invoice->issue_date)->format('d/m/Y') }}</td>
+                <td>
+                    <div class="col-md-12">
+
+                        <div class="d-flex flex-wrap">
+                            @foreach ($authorization->modalities as $modality)
+                                <div class="form-check me-4">
+                                    <label class="form-check-label" for="modality{{ $modality->id }}">
+                                        {{ $modality->modality->name }} - {{ $modality->quantity }} {{ $modality->quantity_type }}
+                                    </label>
+                                </div>
+                            @endforeach
+
+                    </div>
+                </td>
                 <td class="text-nowrap">
                 @if($invoice->status !== 'pago')
                         <a href="{{ route('cobrancas.edit', $authorization->id) }}"

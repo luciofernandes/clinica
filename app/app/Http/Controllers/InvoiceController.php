@@ -22,18 +22,21 @@ class InvoiceController extends Controller
         $request->validate([
             'invoice_number' => 'required|unique:invoices',
             'amount' => 'required|numeric',
-            'status' => 'required|in:pendente,enviado,pago,recebido',
             'issue_date' => 'required|date',
+            'authorization_modality_ids' => 'required|array|min:1',
         ]);
 
-        $authorization->invoices()->create([
+        $invoice = $authorization->invoices()->create([
             'invoice_number' => $request->invoice_number,
             'amount' => $request->amount,
-            'status' => $request->status,
+            'status' => 'pendente',
             'issue_date' => $request->issue_date,
             'created_by' => auth()->id(),
             'updated_by' => auth()->id(),
         ]);
+
+        $invoice->authorizationModalities()->sync($request->authorization_modality_ids);
+
 
         return back()->with('status', 'Nota fiscal adicionada com sucesso.');
     }

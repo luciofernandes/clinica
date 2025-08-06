@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AuthorizationModality;
 use App\Models\HealthPlan;
 use App\Models\Modality;
 use App\Models\Patient;
 use Illuminate\Http\Request;
 use App\Models\Authorization;
 use Illuminate\Pagination\LengthAwarePaginator;
+use PHPUnit\Event\Exception;
 
 class AuthorizationController extends Controller
 {
@@ -150,58 +152,88 @@ class AuthorizationController extends Controller
 
     public function update(Request $request, $id)
     {
-        $authorization = \App\Models\Authorization::findOrFail($id);
+        var_dump("Update Authorization" . $id  . " " . auth()->id()  . " " . $request->authorization_date);
 
-        $request->validate([
-            'patient_id' => 'required|exists:patients,id',
-            'health_plan_id' => 'required',
-            'authorization_date' => 'required|date',
-            'external_enrollment_link' => 'required|url',
-            'authorization_number' => 'required|unique:authorizations,authorization_number,' . $authorization->id,
-            'modalities.*.modality_id' => 'required|exists:modalities,id',
-            'modalities.*.quantity_type' => 'required',
-            'modalities.*.quantity' => 'required|integer',
-            'files.*' => 'file|mimes:pdf,jpg,jpeg,png|max:2048',
-        ]);
+            $authorization = \App\Models\Authorization::findOrFail($id);
 
-        $authorization->update([
-            'patient_id' => $request->patient_id,
-            'health_plan_id' => $request->health_plan_id,
-            'authorization_number' => $request->authorization_number,
-            'external_enrollment_link' => $request->external_enrollment_link,
-            'estimated_end_date' => $request->estimated_end_date,
-            'updated_by' => auth()->id(),
-            'authorization_date' => $request->authorization_date,
-            'authorization_expiration_date' => $request->authorization_expiration_date,
-        ]);
-
-        // Deleta modalidades antigas e recria
-        $authorization->modalities()->delete();
-
-        foreach ($request->modalities as $modality) {
-            $authorization->modalities()->create([
-                'modality_id' => $modality['modality_id'],
-                'quantity_type' => $modality['quantity_type'],
-                'quantity' => $modality['quantity'],
-                'unit_value' => $modality['unit_value'] ?? null,
-                'total_value' => $modality['total_value'] ?? null,
-                'created_by' => auth()->id(),
-                'updated_by' => auth()->id(),
+            $request->validate([
+                'patient_id' => 'required|exists:patients,id',
+                'health_plan_id' => 'required',
+                'authorization_date' => 'required|date',
+                'authorization_number' => 'required|unique:authorizations,authorization_number,' . $authorization->id,
+                'modalities.*.modality_id' => 'required|exists:modalities,id',
+                'modalities.*.quantity_type' => 'required',
+                'modalities.*.quantity' => 'required|integer',
+                'files.*' => 'file|mimes:pdf,jpg,jpeg,png|max:2048',
             ]);
-        }
 
-        // Upload de novos arquivos (mantém os antigos)
-        if ($request->hasFile('files')) {
-            foreach ($request->file('files') as $file) {
-                $path = $file->store('authorizations', 'public');
-                $authorization->files()->create([
-                    'file_name' => $file->getClientOriginalName(),
-                    'file_path' => $path,
-                    'created_by' => auth()->id(),
-                    'updated_by' => auth()->id(),
-                ]);
+
+            $authorization->update([
+                'patient_id' => $request->patient_id,
+                'health_plan_id' => $request->health_plan_id,
+                'authorization_number' => $request->authorization_number,
+                'estimated_end_date' => $request->estimated_end_date,
+                'updated_by' => auth()->id(),
+                'authorization_date' => $request->authorization_date,
+                'authorization_expiration_date' => $request->authorization_expiration_date,
+
+            ]);
+            var_dump($request->modalities);
+
+
+            // Pega os IDs enviados
+            $receivedIds = collect($request->modalities)->pluck('id')->filter();
+
+            // Deleta as modalidades que não foram enviadas
+            $authorization->modalities()
+                ->whereNotIn('id', $receivedIds)
+                ->delete();
+
+            // Cria ou atualiza cada modalidade
+            foreach ($request->modalities as $modalityData) {
+                if (!empty($modalityData['id'])) {
+                    // UPDATE
+                    $modality = AuthorizationModality::find($modalityData['id']);
+                    if ($modality) {
+                        $modality->update([
+                            'modality_id' => $modalityData['modality_id'],
+                            'quantity' => $modalityData['quantity'],
+                            'quantity_type' => $modalityData['quantity_type'],
+                            'unit_value' => $modalityData['unit_value'] ?? null,
+                            'total_value' => $modalityData['total_value'] ?? null,
+                            'matricula_id' => $modalityData['matricula_id'] ?? null,
+                            'updated_by' => auth()->id(),
+                        ]);
+                    }
+                } else {
+                    // CREATE
+                    $authorization->modalities()->create([
+                        'modality_id' => $modalityData['modality_id'],
+                        'quantity' => $modalityData['quantity'],
+                        'quantity_type' => $modalityData['quantity_type'],
+                        'unit_value' => $modalityData['unit_value'] ?? null,
+                        'total_value' => $modalityData['total_value'] ?? null,
+                        'matricula_id' => $modalityData['matricula_id'] ?? null,
+                        'created_by' => auth()->id(),
+                        'updated_by' => auth()->id(),
+                    ]);
+                }
             }
-        }
+
+            // Upload de novos arquivos (mantém os antigos)
+            if ($request->hasFile('files')) {
+                foreach ($request->file('files') as $file) {
+                    $path = $file->store('authorizations', 'public');
+                    $authorization->files()->create([
+                        'file_name' => $file->getClientOriginalName(),
+                        'file_path' => $path,
+                        'created_by' => auth()->id(),
+                        'updated_by' => auth()->id(),
+                    ]);
+                }
+            }
+
+
 
         return redirect()->route('autorizacoes.index')->with('status', 'Autorização atualizada com sucesso!');
     }

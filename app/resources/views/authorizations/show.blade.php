@@ -23,9 +23,7 @@
             <p><strong>Data da Autorização:</strong> {{ \Carbon\Carbon::parse($authorization->authorization_date)->format('d/m/Y') }}</p>
             <p><strong>Validade:</strong> {{ \Carbon\Carbon::parse($authorization->authorization_expiration_date)->format('d/m/Y') }}</p>
             <p><strong>Última Sessão:</strong> {{ $authorization->estimated_end_date ? \Carbon\Carbon::parse($authorization->estimated_end_date)->format('d/m/Y') : '-' }}</p>
-            @if($authorization->external_enrollment_link)
-                <p><strong>Matrícula Externa:</strong> <a href="{{ $authorization->external_enrollment_link }}" target="_blank">Ver</a></p>
-            @endif
+
         </div>
     </div>
 
@@ -43,6 +41,7 @@
                 <th>Quantidade</th>
                 <th>Tipo</th>
                 <th>Valor Total</th>
+                <th>Matricula</th>
             </tr>
             </thead>
             <tbody>
@@ -52,6 +51,19 @@
                     <td>{{ $modality->quantity }}</td>
                     <td>{{ $modality->quantity_type }}</td>
                     <td>R$ {{ number_format($modality->total_value ?? 0, 2, ',', '.') }}</td>
+                    <td>
+                    @if ($modality->matricula_id)
+                        <a href="https://painel.softwarepilates.com.br/Matricula/Matricula.aspx?c={{ $modality->matricula_id }}"
+                           class="form-control btn btn-sm btn-info" target="_blank">
+                            Ver/Editar Matrícula
+                        </a>
+                    @else
+                        <a href="https://painel.softwarepilates.com.br/Matricula/Matricula.aspx"
+                           class="form-control btn btn-sm btn-primary" target="_blank">
+                            Criar Matrícula
+                        </a>
+                    @endif
+                    </td>
                 </tr>
             @endforeach
             </tbody>

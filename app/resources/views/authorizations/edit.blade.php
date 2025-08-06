@@ -138,7 +138,7 @@
                         <div class="form-group">
                             <label>Matricula</label>
 
-                        @if ($modality->matricula_id)
+                            @if ($modality->matricula_id)
                                 <a href="https://painel.softwarepilates.com.br/Matricula/Matricula.aspx?c={{ $modality->matricula_id }}"
                                    class="form-control btn btn-sm btn-info" target="_blank">
                                     Ver/Editar Matrícula
@@ -149,6 +149,13 @@
                                     Criar Matrícula
                                 </a>
                             @endif
+                            @if ($modality->invoices->isEmpty())
+                                <button type="button" class="btn btn-danger btn-sm remove-modality">
+                                    Remover
+                                </button>
+
+                            @endif
+
                         </div>
                         {{-- ID oculto da modalidade para o update --}}
                         <input type="hidden" name="modalities[{{ $index }}][id]" value="{{ $modality->id }}">

@@ -26,4 +26,10 @@ class Invoice extends Model
         return $this->belongsTo(\App\Models\Authorization::class);
     }
 
+    public function authorizationModalities()
+    {
+        return $this->belongsToMany(AuthorizationModality::class)
+            ->withTimestamps();
+    }
+
 }
