@@ -94,7 +94,7 @@
             <label for="observation">Observação</label>
             <textarea name="observation" id="observation" class="form-control">{{ old('observation', $authorization->observation ?? '') }}</textarea>
         </div>
-        
+
         {{-- Modalidades existentes --}}
         <hr>
         <h5>Modalidades</h5>
