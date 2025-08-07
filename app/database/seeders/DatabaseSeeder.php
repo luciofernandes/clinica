@@ -15,12 +15,9 @@ class DatabaseSeeder extends Seeder
     {
         // User::factory(10)->create();
 
-        User::factory()->create([
+        \DB::table('users')->updateOrInsert([
             'name' => 'Test User',
             'email' => 'test@example.com',
-        ]);
-        $this->call([
-            HealthPlanSeeder::class,
         ]);
 
     }

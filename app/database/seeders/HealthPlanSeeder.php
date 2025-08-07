@@ -12,7 +12,7 @@ class HealthPlanSeeder extends Seeder
      */
     public function run(): void
     {
-        \DB::table('health_plans')->insert([
+        \DB::table('health_plans')->updateOrInsert([
             ['name' => 'GEAP'],
             ['name' => 'Bradesco Saúde'],
             ['name' => 'Unimed'],

@@ -12,7 +12,7 @@ class ModalitySeeder extends Seeder
      */
     public function run(): void
     {
-        \DB::table('modalities')->insert([
+        \DB::table('modalities')->updateOrInsert([
             ['name' => 'FISIOTERAPIA INFANTIL	', 'description' => 'FISIOTERAPIA INFANTIL'],
             ['name' => 'FONOAUDIOLOGIA', 'description' => 'FONOAUDIOLOGIA'],
             ['name' => 'MUSICOTERAPIA', 'description' => 'MUSICOTERAPIA'],
