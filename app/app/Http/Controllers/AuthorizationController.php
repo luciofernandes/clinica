@@ -60,6 +60,7 @@ class AuthorizationController extends Controller
                     'total_value' => $modality['total_value'] ?? null,
                     'created_by' => auth()->id(),
                     'updated_by' => auth()->id(),
+                    'last_session_date' => $modality['last_session_date'] ?? null,
                 ]);
             }
 
@@ -203,6 +204,7 @@ class AuthorizationController extends Controller
                             'total_value' => $modalityData['total_value'] ?? null,
                             'matricula_id' => $modalityData['matricula_id'] ?? null,
                             'updated_by' => auth()->id(),
+                            'last_session_date' => $modality['last_session_date'] ?? null,
                         ]);
                     }
                 } else {
@@ -216,6 +218,7 @@ class AuthorizationController extends Controller
                         'matricula_id' => $modalityData['matricula_id'] ?? null,
                         'created_by' => auth()->id(),
                         'updated_by' => auth()->id(),
+                        'last_session_date' => $modality['last_session_date'] ?? null,
                     ]);
                 }
             }

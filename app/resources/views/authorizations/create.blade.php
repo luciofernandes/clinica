@@ -169,6 +169,11 @@
                         <label>Valor Total</label>
                         <input type="number" name="modalities[0][total_value]" step="0.01" class="form-control">
                     </div>
+                    <div class="form-group">
+                        <label for="last_session_date">Data da Última Sessão</label>
+                        <input type="date" name="last_session_date" class="form-control"
+                               value="{{ old('last_session_date', $modality->last_session_date ? $modality->last_session_date->format('Y-m-d') : '') }}">
+                    </div>
                 </div>
             </div>
         </div>

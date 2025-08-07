@@ -16,6 +16,7 @@ class AuthorizationModality extends Model
         'created_by',
         'updated_by',
         'matricula_id',
+        'last_session_date',
     ];
     public function modality()
     {

@@ -133,6 +133,11 @@
                             <label>Valor Total</label>
                             <input type="number" name="modalities[{{ $index }}][total_value]" step="0.01" class="form-control" value="{{ $modality->total_value }}">
                         </div>
+                        <div class="form-group">
+                            <label for="last_session_date">Dt. Última Sessão</label>
+                            <input type="date" name="last_session_date" class="form-control"
+                                   value="{{ old('last_session_date', $modality->last_session_date ? $modality->last_session_date->format('Y-m-d') : '') }}">
+                        </div>
                         {{-- Matrícula ID --}}
                         <div class="form-group">
                             <label>ID da Matrícula</label>
@@ -141,26 +146,29 @@
                                    value="{{ old("modalities.$index.matricula_id", $modality->matricula_id) }}">
                         </div>
                         <div class="form-group">
-                            <label>Matricula</label>
-
+                            <label>Ações</label>
+                            <div style="display: block; padding: .375rem .75rem; height: calc(2.25rem + 2px)">
                             @if ($modality->matricula_id)
                                 <a href="https://painel.softwarepilates.com.br/Matricula/Matricula.aspx?c={{ $modality->matricula_id }}"
-                                   class="form-control btn btn-sm btn-info" target="_blank">
-                                    Ver/Editar Matrícula
+                                   class="btn btn-sm btn-outline-secondary ms-2"
+                                   title="Editar Matrícula">
+                                    <i class="fas fa-eye"></i>
                                 </a>
                             @else
-                                <a href="https://painel.softwarepilates.com.br/Matricula/Matricula.aspx"
-                                   class="form-control btn btn-sm btn-primary" target="_blank">
-                                    Criar Matrícula
-                                </a>
+                                <button type="button" class="btn btn-sm btn-outline-primary ms-2"
+                                        title="Criar Matrícula">
+                                    <i class="fas fa-plus"></i>
+                                </button>
                             @endif
                             @if ($modality->invoices->isEmpty())
-                                <button type="button" class="btn btn-danger btn-sm remove-modality">
-                                    Remover
+
+                                <button type="button" class="btn btn-sm btn-outline-danger ms-1"
+                                        title="Remover">
+                                    <i class="fas fa-trash"></i>
                                 </button>
 
                             @endif
-
+                            </div>
                         </div>
                         {{-- ID oculto da modalidade para o update --}}
                         <input type="hidden" name="modalities[{{ $index }}][id]" value="{{ $modality->id }}">
