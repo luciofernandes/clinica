@@ -42,7 +42,6 @@ class AuthorizationController extends Controller
             $authorization = \App\Models\Authorization::create([
                 'patient_id' => $request->patient_id,
                 'authorization_number' => $request->authorization_number,
-                'external_enrollment_link' => $request->external_enrollment_link,
                 'estimated_end_date' => $request->estimated_end_date,
                 'created_by' => auth()->id(),
                 'updated_by' => auth()->id(),

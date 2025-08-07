@@ -18,7 +18,6 @@ class Authorization extends Model
         'authorization_date',
         'authorization_expiration_date',
         'estimated_end_date',
-        'external_enrollment_link',
         'created_by',
         'updated_by',
          'observation',
