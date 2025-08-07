@@ -23,7 +23,7 @@
             <p><strong>Data da Autorização:</strong> {{ \Carbon\Carbon::parse($authorization->authorization_date)->format('d/m/Y') }}</p>
             <p><strong>Validade:</strong> {{ \Carbon\Carbon::parse($authorization->authorization_expiration_date)->format('d/m/Y') }}</p>
             <p><strong>Última Sessão:</strong> {{ $authorization->estimated_end_date ? \Carbon\Carbon::parse($authorization->estimated_end_date)->format('d/m/Y') : '-' }}</p>
-
+            <p><strong>Observação:</strong>{{ $authorization->observation ?? '-' }}</p>
         </div>
     </div>
 

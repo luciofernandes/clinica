@@ -49,6 +49,7 @@ class AuthorizationController extends Controller
                 'authorization_date' => $request->authorization_date,
                 'authorization_expiration_date' => $request->authorization_expiration_date,
                 'health_plan_id' => $request->health_plan_id ?? null,
+                'observation' => $request->observation, // <- aqui
             ]);
 
             foreach ($request->modalities as $modality) {
@@ -176,9 +177,9 @@ class AuthorizationController extends Controller
                 'updated_by' => auth()->id(),
                 'authorization_date' => $request->authorization_date,
                 'authorization_expiration_date' => $request->authorization_expiration_date,
+                'observation' => $request->observation,
 
             ]);
-            var_dump($request->modalities);
 
 
             // Pega os IDs enviados

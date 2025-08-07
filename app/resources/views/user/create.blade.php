@@ -8,7 +8,7 @@
 
 @section('content')
 
-    <form action="{{ route('users.store') }}" method="POST">
+    <form action="{{ route('user.store') }}" method="POST">
         @csrf
 
         <div class="form-group">
@@ -35,7 +35,7 @@
             </select>
         </div>
         <button type="submit" class="btn btn-success">Salvar</button>
-        <a href="{{ route('users.index') }}" class="btn btn-secondary">Cancelar</a>
+        <a href="{{ route('user.index') }}" class="btn btn-secondary">Cancelar</a>
 
     </form>
 

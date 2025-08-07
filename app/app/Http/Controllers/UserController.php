@@ -26,6 +26,7 @@ class   UserController extends Controller
     public function create()
     {
         //
+        return view('user.create');
     }
 
     /**
@@ -33,24 +34,23 @@ class   UserController extends Controller
      */
     public function store(Request $request)
     {
-        // Validação dos dados recebidos
-        $validatedData = $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:8|confirmed',
-            'is_admin' => 'required|boolean', // Validando o campo 'role' como booleano
-        ]);
+//        // Validação dos dados recebidos
+//        $validatedData = $request->validate([
+//            'name' => 'required|string|max:255',
+//            'email' => 'required|string|email|max:255|unique:users',
+//            'password' => 'required|string|min:8|confirmed',
+//        ]);
 
         // Criação do usuário
         $user = \App\Models\User::create([
-            'name' => $validatedData['name'],
-            'email' => $validatedData['email'],
-            'password' => bcrypt($validatedData['password']),
-            'is_admin' => $validatedData['is_admin'], // Atribuindo o valor do campo 'role'
+            'name' => $request['name'],
+            'email' => $request['email'],
+            'password' => bcrypt($request['password']),
+            'is_admin' => $request['is_admin'], // Atribuindo o valor do campo 'role'
         ]);
 
         // Retorno de resposta
-        return response()->json(['message' => 'Usuário criado com sucesso!', 'user' => $user], 201);
+        return redirect()->route('user.index')->with('status', 'Usuário criado com sucesso.');
     }
 
     /**

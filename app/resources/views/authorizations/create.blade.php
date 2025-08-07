@@ -124,6 +124,11 @@
             <input type="date" name="estimated_end_date" class="form-control">
         </div>
 
+        <div class="form-group">
+            <label for="observation">Observação</label>
+            <textarea name="observation" id="observation" class="form-control">{{ old('observation', $authorization->observation ?? '') }}</textarea>
+        </div>
+
         {{-- Modalidades Dinâmicas --}}
         <hr>
         <h5>Modalidades</h5>

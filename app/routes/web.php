@@ -50,7 +50,7 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/usuarios', [\App\Http\Controllers\UserController::class, 'index'])->name('user.index');
     Route::get('/usuarios/create', [\App\Http\Controllers\UserController::class, 'create'])->name('user.create');
-    Route::post('/usuarios ', [\App\Http\Controllers\UserController::class, 'store'])->name('user .store');
+    Route::post('/usuarios ', [\App\Http\Controllers\UserController::class, 'store'])->name('user.store');
     Route::delete('/usuarios/{user}/destroy', [\App\Http\Controllers\UserController::class, 'destroy'])->name('user.destroy');
 
 });

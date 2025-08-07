@@ -21,6 +21,7 @@ class Authorization extends Model
         'external_enrollment_link',
         'created_by',
         'updated_by',
+         'observation',
     ];
     public function modalities()
     {
