@@ -176,7 +176,9 @@
                 </div>
             @endforeach
         </div>
-
+        <button type="button" class="btn btn-sm btn-secondary mb-3" id="add-modality-btn">
+            + Adicionar Modalidade
+        </button>
         {{-- Arquivo de Autorização --}}
         <div class="form-group">
             <label for="files[]">Anexar Novos Arquivos</label>
