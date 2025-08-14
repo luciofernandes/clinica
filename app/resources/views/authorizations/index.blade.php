@@ -12,7 +12,12 @@
         });
     </script>
 @endpush
+@push('styles')
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+@endpush
+
 @section('content')
+
 
     @if(session('status'))
         <div class="alert alert-success">{{ session('status') }}</div>
@@ -58,11 +63,36 @@
         <tr>
             <th>Nº Autorização</th>
             <th>Paciente</th>
-            <th>Plano</th>
-            <th>Dt Autorização</th>
-            <th>Validade</th>
-            <th>Última Sessão</th>
+            <th>
+                <a href="{{ route('autorizacoes.index', array_merge(request()->query(), ['sort' => 'plan', 'direction' => $sort === 'plan' && $direction === 'asc' ? 'desc' : 'asc'])) }}">
+                    Plano @if($sort === 'plan') <i class="fas fa-sort-{{ $direction === 'asc' ? 'up' : 'down' }}"></i>
+                    @else
+                        <i class="fas fa-sort"></i> @endif
+                </a>
+            </th>
+            <th>
+                <a href="{{ route('autorizacoes.index', array_merge(request()->query(), ['sort' => 'authorization_date', 'direction' => $sort === 'authorization_date' && $direction === 'asc' ? 'desc' : 'asc'])) }}">
+                    Dt Autorização @if($sort === 'authorization_date') <i class="fas fa-sort-{{ $direction === 'asc' ? 'up' : 'down' }}"></i>
+                    @else
+                        <i class="fas fa-sort"></i> @endif
+                </a>
+            </th>
+            <th>
+                <a href="{{ route('autorizacoes.index', array_merge(request()->query(), ['sort' => 'authorization_expiration_date', 'direction' => $sort === 'authorization_expiration_date' && $direction === 'asc' ? 'desc' : 'asc'])) }}">
+                    Validade @if($sort === 'authorization_expiration_date') <i class="fas fa-sort-{{ $direction === 'asc' ? 'up' : 'down' }}"></i>
+                    @else
+                        <i class="fas fa-sort"></i> @endif
+                </a>
+            </th>
+            <th>
+                <a href="{{ route('autorizacoes.index', array_merge(request()->query(), ['sort' => 'estimated_end_date', 'direction' => $sort === 'estimated_end_date' && $direction === 'asc' ? 'desc' : 'asc'])) }}">
+                    Última Sessão @if($sort === 'estimated_end_date') <i class="fas fa-sort-{{ $direction === 'asc' ? 'up' : 'down' }}"></i>
+                    @else
+                        <i class="fas fa-sort"></i> @endif
+                </a>
+            </th>
             <th>Valor</th>
+            <th>Modalidades</th>
             <th>Status da Cobrança</th>
             <th>Ações</th>
         </tr>
@@ -78,6 +108,8 @@
                 <td>{{ \Carbon\Carbon::parse($authorization->authorization_date)->format('d/m/Y') }}</td>
                 <td>{{ \Carbon\Carbon::parse($authorization->authorization_expiration_date)->format('d/m/Y') }}</td>
                 <td>{{ $authorization->estimated_end_date ? \Carbon\Carbon::parse($authorization->estimated_end_date)->format('d/m/Y') : '-' }}</td>
+
+
                 {{-- Valor total das modaldiades --}}
                 <td>
                     @php
@@ -89,6 +121,26 @@
                         @endphp
                     @endforeach
                         <p>R$ {{ number_format($totalValue, 2, ',', '.') }}</p>
+                </td>
+                <td>
+                    @foreach ($authorization->modalities as $modality)
+                        <div  style=" padding: .375rem .75rem; height: calc(2.25rem + 2px)">
+                            {{ $modality->modality->name ?? 'Desconhecida' }}
+                            @if ($modality->matricula_id)
+                                <a href="https://painel.softwarepilates.com.br/Matricula/Matricula.aspx?c={{ $modality->matricula_id }}"
+                                   target="_blank"
+                                   title="Editar Matrícula">
+                                    <i class="fas fa-eye"></i>
+                                </a>
+                            @else
+                                <a href="https://painel.softwarepilates.com.br/Matricula/Matricula.aspx"  target="_blank"
+
+                                   title="Criar Matrícula">
+                                    <i class="fas fa-plus"></i>
+                                </a>
+                            @endif
+                        </div>
+                    @endforeach
                 </td>
                 <td>
                 @php

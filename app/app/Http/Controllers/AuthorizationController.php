@@ -32,7 +32,7 @@ class AuthorizationController extends Controller
             $request->validate([
                 'patient_id' => 'required|exists:patients,id',
                 'health_plan_id' => 'required|exists:health_plans,id',
-                'authorization_number' => 'required|unique:authorizations',
+                'authorization_number' => 'nullable|unique:authorizations',
                 'modalities.*.modality_id' => 'required|exists:modalities,id',
                 'modalities.*.quantity_type' => 'required',
                 'modalities.*.quantity' => 'required|integer',
@@ -83,11 +83,14 @@ class AuthorizationController extends Controller
 
         return redirect()->route('autorizacoes.index')->with('status', 'Autorização criada com sucesso!');
     }
-    public function index(Request $request)    {
-
+    public function index(Request $request)
+    {
         $statusFiltro = $request->input('status');
         $perPage = 10;
         $currentPage = LengthAwarePaginator::resolveCurrentPage();
+
+        $sort = $request->input('sort', 'authorization_date');
+        $direction = $request->input('direction', 'asc');
 
         $query = \App\Models\Authorization::with(['modalities', 'invoices', 'patient', 'healthPlan']);
 
@@ -105,15 +108,24 @@ class AuthorizationController extends Controller
             });
         }
 
-        // Executa a query base (paciente + plano)
+        // ⚙️ Ordenação
+        if (in_array($sort, ['authorization_date', 'authorization_expiration_date', 'estimated_end_date'])) {
+            $query->orderBy($sort, $direction);
+        } elseif ($sort === 'plan') {
+            $query->join('health_plans', 'authorizations.health_plan_id', '=', 'health_plans.id')
+                ->orderBy('health_plans.name', $direction)
+                ->select('authorizations.*'); // evitar problemas de colisão
+        }
+
+        // Executa a query e carrega as relações
         $results = $query->get();
 
-        // 🧠 Filtro por billing_status (aplicado em Collection)
+        // 🧠 Filtro por billing_status (após carregar os dados)
         $filtered = $results->filter(function ($auth) use ($statusFiltro) {
             return !$statusFiltro || $auth->billing_status === $statusFiltro;
         });
 
-        // Paginação manual
+        // Paginação
         $authorizations = new LengthAwarePaginator(
             $filtered->forPage($currentPage, $perPage),
             $filtered->count(),
@@ -121,13 +133,12 @@ class AuthorizationController extends Controller
             $currentPage,
             ['path' => $request->url(), 'query' => $request->query()]
         );
+
         $healthPlans = HealthPlan::orderBy('name')->get();
 
-
-        return view('authorizations.index', compact('authorizations','healthPlans'));
-
-
+        return view('authorizations.index', compact('authorizations', 'healthPlans', 'sort', 'direction'));
     }
+
 
     public function show($id)
     {
@@ -161,7 +172,7 @@ class AuthorizationController extends Controller
                 'patient_id' => 'required|exists:patients,id',
                 'health_plan_id' => 'required',
                 'authorization_date' => 'required|date',
-                'authorization_number' => 'required|unique:authorizations,authorization_number,' . $authorization->id,
+                'authorization_number' => 'nullable|unique:authorizations,authorization_number,' . $authorization->id,
                 'modalities.*.modality_id' => 'required|exists:modalities,id',
                 'modalities.*.quantity_type' => 'required',
                 'modalities.*.quantity' => 'required|integer',

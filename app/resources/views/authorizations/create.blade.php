@@ -103,7 +103,7 @@
         {{-- Nº da autorização --}}
         <div class="form-group">
             <label for="authorization_number">Nº da Autorização</label>
-            <input type="text" name="authorization_number" class="form-control" required>
+            <input type="text" name="authorization_number" class="form-control">
         </div>
 
         <div class="form-group">

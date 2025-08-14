@@ -68,7 +68,7 @@
         {{-- Nº da autorização --}}
         <div class="form-group">
             <label for="authorization_number">Nº da Autorização</label>
-            <input type="text" name="authorization_number" class="form-control" value="{{ old('authorization_number', $authorization->authorization_number) }}" required>
+            <input type="text" name="authorization_number" class="form-control" value="{{ old('authorization_number', $authorization->authorization_number) }}" >
         </div>
 
         <div class="form-group">
@@ -151,14 +151,18 @@
                             @if ($modality->matricula_id)
                                 <a href="https://painel.softwarepilates.com.br/Matricula/Matricula.aspx?c={{ $modality->matricula_id }}"
                                    class="btn btn-sm btn-outline-secondary ms-2"
+                                   target="_blank"
                                    title="Editar Matrícula">
                                     <i class="fas fa-eye"></i>
                                 </a>
                             @else
-                                <button type="button" class="btn btn-sm btn-outline-primary ms-2"
-                                        title="Criar Matrícula">
-                                    <i class="fas fa-plus"></i>
-                                </button>
+
+                                    <a href="https://painel.softwarepilates.com.br/Matricula/Matricula.aspx"
+                                       target="_blank"
+                                       class="btn btn-sm btn-outline-secondary ms-2"
+                                       title="Criar Matrícula">
+                                        <i class="fas fa-plus"></i>
+                                    </a>
                             @endif
                             @if ($modality->invoices->isEmpty())
 
