@@ -185,11 +185,6 @@ class AuthorizationController extends Controller
             // Pega os IDs enviados
             $receivedIds = collect($request->modalities)->pluck('id')->filter();
 
-            // Deleta as modalidades que não foram enviadas
-            $authorization->modalities()
-                ->whereNotIn('id', $receivedIds)
-                ->delete();
-
             // Cria ou atualiza cada modalidade
             foreach ($request->modalities as $modalityData) {
                 if (!empty($modalityData['id'])) {
