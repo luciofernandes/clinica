@@ -101,6 +101,11 @@ class AuthorizationController extends Controller
             });
         }
 
+        // 📅 Filtro por numero da autorização
+        if ($request->filled('numero')) {
+            $query->where('authorization_number', 'like', '%' . $request->numero . '%');
+        }
+
         // 🏥 Filtro por plano de saúde
         if ($request->filled('plano')) {
             $query->whereHas('healthPlan', function ($q) use ($request) {

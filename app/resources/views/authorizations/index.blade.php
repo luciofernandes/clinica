@@ -26,6 +26,10 @@
     <a href="{{ route('autorizacoes.create') }}" class="btn btn-primary mb-3">Nova Autorização</a>
     <form method="GET" class="mb-3">
         <div class="form-row">
+            <div class="form-group mr-2">
+                <label for="numero">Nº Autorização</label>
+                <input type="text" name="numero" value="{{ request('numero') }}" class="form-control" placeholder="Ex: 123456">
+            </div>
             <div class="col-md-3">
                 <input type="text" name="paciente" class="form-control" placeholder="Paciente"
                        value="{{ request('paciente') }}">
