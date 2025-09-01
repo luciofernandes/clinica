@@ -9,7 +9,8 @@ use App\Http\Controllers\PatientImportController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return view('login');
+    Route::get('/', [App\Http\Controllers\HomeController::class, 'index']);
+
 });
 
 Auth::routes();
