@@ -8,9 +8,9 @@ use App\Http\Controllers\PatientController;
 use App\Http\Controllers\PatientImportController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    Route::get('/', [App\Http\Controllers\HomeController::class, 'index']);
 
+Route::get('/', function () {
+    return redirect('/app/login'); // ou outra página inicial do sistema
 });
 
 Auth::routes();
@@ -22,8 +22,9 @@ Auth::routes();
 Route::middleware('auth')->group(function () {
 
     // 🏠 Dashboard e início
-    Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-    Route::get('/home', [App\Http\Controllers\HomeController::class, 'index']);
+    //Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+    Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
 
     // 👤 Pacientes
     Route::get('/pacientes/importar', [PatientImportController::class, 'index'])->name('pacientes.importar');

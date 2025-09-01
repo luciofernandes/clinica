@@ -90,7 +90,7 @@ class AuthorizationController extends Controller
         $currentPage = LengthAwarePaginator::resolveCurrentPage();
 
         $sort = $request->input('sort', 'authorization_date');
-        $direction = $request->input('direction', 'asc');
+        $direction = $request->input('direction', 'desc');
 
         $query = \App\Models\Authorization::with(['modalities', 'invoices', 'patient', 'healthPlan']);
 
