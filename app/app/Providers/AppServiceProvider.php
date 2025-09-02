@@ -20,9 +20,11 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-//        if (config('app.url')) {
-//            URL::forceRootUrl(config('app.url')); // respeita APP_URL = .../app
-//            // URL::forceScheme('https'); // só se usar HTTPS
-//        }
+        // app/Providers/AppServiceProvider.php -> boot()
+        if (app()->environment('production')) {
+             URL::forceScheme('https');
+             URL::forceRootUrl(config('app.url')); // respeita APP_URL = .../app
+        }
+
     }
 }
