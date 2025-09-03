@@ -135,7 +135,7 @@
                         </div>
                         <div class="form-group">
                             <label for="last_session_date">Dt. Última Sessão</label>
-                            <input type="date" name="last_session_date" class="form-control"
+                            <input type="date" name="modalities[{{ $index }}][last_session_date]" class="form-control"
                                    value="{{ old('last_session_date', $modality->last_session_date ? $modality->last_session_date->format('Y-m-d') : '') }}">
                         </div>
                         {{-- Matrícula ID --}}
