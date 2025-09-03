@@ -47,10 +47,10 @@ class PatientImportController extends Controller
 //                continue;
 //            }
 
-            if (Patient::where('cpf', $cpf)->exists()) {
-                $duplicados++;
-                continue;
-            }
+//            if (Patient::where('cpf', $cpf)->exists()) {
+//                $duplicados++;
+//                continue;
+//            }
 
 
             if (Patient::where('name', $name)->exists()) {
