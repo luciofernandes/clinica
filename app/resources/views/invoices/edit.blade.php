@@ -46,6 +46,16 @@
             <input type="text" class="form-control" value="{{ $invoice->invoice_number }}" disabled>
         </div>
 
+{{--        <div class="form-group">--}}
+{{--            <label>Cliente</label>--}}
+{{--            <input type="text" class="form-control" value="{{ $invoice->client->name }}" >--}}
+{{--        </div>--}}
+
+        <div class="form-group">
+            <label>Valor</label>
+            <input type="number" step="0.01" name="amount" class="form-control" value="{{ $invoice->amount }}" >
+        </div>
+
         <div class="form-group">
             <label>Status</label>
 

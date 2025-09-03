@@ -74,18 +74,20 @@
         @foreach($invoices as $invoice)
             <tr>
                 <td>{{ $invoice->invoice_number }}</td>
-                <td>R$ {{ number_format($invoice->amount, 2, ',', '.') }}</td>
+                <form method="POST" action="{{ route('cobrancas.update', $invoice->id) }}">
+                    @csrf
+                    @method('PUT')
+                <td> <input type="number" step="0.01" name="amount" class="form-control" value="{{ $invoice->amount }}" ></td>
                 <td>
-                    <form method="POST" action="{{ route('cobrancas.update', $invoice->id) }}">
-                        @csrf
-                        @method('PUT')
+
                         <select name="status" class="form-control" onchange="this.form.submit()">
                             @foreach(['pendente', 'enviado', 'pago', 'recebido'] as $status)
                                 <option value="{{ $status }}" {{ $invoice->status === $status ? 'selected' : '' }}>{{ ucfirst($status) }}</option>
                             @endforeach
                         </select>
-                    </form>
+
                 </td>
+                </form>
                 <td>{{ \Carbon\Carbon::parse($invoice->issue_date)->format('d/m/Y') }}</td>
                 <td>
                     <div class="col-md-12">

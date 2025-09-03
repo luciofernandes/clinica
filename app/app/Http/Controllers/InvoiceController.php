@@ -58,18 +58,21 @@ class InvoiceController extends Controller
     {
         $rules = [
             'status' => 'required|in:pendente,enviado,pago,recebido',
+            'amount' => 'required|numeric',
         ];
 
         if ($request->status === 'pago') {
             $rules['payment_date'] = 'required|date';
         }
-
+        // Convert the amount to the correct format
+        //$amount = str_replace(['.', ','], ['', '.'], $request->amount);
         $request->validate($rules);
 
         $invoice->update([
             'status' => $request->status,
             'payment_date' => $request->status === 'pago' ? $request->payment_date : null,
             'updated_by' => auth()->id(),
+            'amount' =>$request->amount,
         ]);
 
         return redirect()
