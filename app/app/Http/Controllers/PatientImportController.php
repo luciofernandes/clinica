@@ -39,7 +39,12 @@ class PatientImportController extends Controller
         $duplicados = 0;
 
         foreach ($csv->getRecords() as $record) {
-            $cpf = preg_replace('/[^0-9]/', '', $record['CPF'] ?? '');
+            if ($record['CPF'] != '00000000000' && !$record['CPF']) {
+                $cpf = preg_replace('/[^0-9]/', '', $record['CPF'] ?? '');
+            }
+            else {
+                $cpf = null;
+            }
             $name = $record['NOME'] ?? null;
 
 //            if (!$this->validaCpf($cpf) || !$name) {
