@@ -42,10 +42,10 @@ class PatientImportController extends Controller
             $cpf = preg_replace('/[^0-9]/', '', $record['CPF'] ?? '');
             $name = $record['NOME'] ?? null;
 
-            if (!$this->validaCpf($cpf) || !$name) {
-                $ignorados++;
-                continue;
-            }
+//            if (!$this->validaCpf($cpf) || !$name) {
+//                $ignorados++;
+//                continue;
+//            }
 
             if (Patient::where('cpf', $cpf)->exists()) {
                 $duplicados++;
