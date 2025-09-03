@@ -271,4 +271,20 @@ class AuthorizationController extends Controller
 
         return view('authorizations.cobranca_index', compact('authorizations'));
     }
+
+    public function removeModality($authorizationId, $modalityId)
+    {
+        // Encontra a autorização
+        $authorization = Authorization::with('modalities')->findOrFail($authorizationId);
+
+        // Verifica se a modalidade pertence à autorização
+        $modality = $authorization->modalities()->findOrFail($modalityId);
+
+        // Remove a modalidade
+        $modality->delete();
+
+        return redirect()->route('autorizacoes.edit', $authorizationId)
+            ->with('status', 'Modalidade removida com sucesso!');
+    }
+
 }

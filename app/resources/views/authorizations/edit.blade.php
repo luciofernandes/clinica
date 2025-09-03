@@ -156,7 +156,6 @@
                                     <i class="fas fa-eye"></i>
                                 </a>
                             @else
-
                                     <a href="https://painel.softwarepilates.com.br/Matricula/Matricula.aspx"
                                        target="_blank"
                                        class="btn btn-sm btn-outline-secondary ms-2"
@@ -166,10 +165,18 @@
                             @endif
                             @if ($modality->invoices->isEmpty())
 
-                                <button type="button" class="btn btn-sm btn-outline-danger ms-1"
-                                        title="Remover">
-                                    <i class="fas fa-trash"></i>
-                                </button>
+{{--                                <button type="button" class="btn btn-sm btn-outline-danger ms-1"--}}
+{{--                                        title="Remover">--}}
+{{--                                    <i class="fas fa-trash"></i>--}}
+{{--                                </button>--}}
+
+                                    <form action="{{ route('autorizacoes.modalidades.destroy', [$authorization->id, $modality->id]) }}" method="POST" onsubmit="return confirm('Tem certeza que deseja remover esta modalidade?')">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-sm btn-danger" title="Remover">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </form>
 
                             @endif
                             </div>
