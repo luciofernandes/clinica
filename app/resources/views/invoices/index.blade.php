@@ -78,6 +78,8 @@
                     @csrf
                     @method('PUT')
                 <td> <input type="number" step="0.01" name="amount" class="form-control" value="{{ $invoice->amount }}" ></td>
+                    <td><input type="date" name="payment_date" class="form-control" id="payment_date"
+                               value="{{ old('payment_date', $invoice->payment_date) }}"></td>
                 <td>
 
                         <select name="status" class="form-control" onchange="this.form.submit()">

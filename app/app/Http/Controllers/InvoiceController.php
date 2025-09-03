@@ -59,6 +59,7 @@ class InvoiceController extends Controller
         $rules = [
             'status' => 'required|in:pendente,enviado,pago,recebido',
             'amount' => 'required|numeric',
+            'payment_date' => 'nullable|date',
         ];
 
         if ($request->status === 'pago') {
@@ -67,6 +68,7 @@ class InvoiceController extends Controller
         // Convert the amount to the correct format
         //$amount = str_replace(['.', ','], ['', '.'], $request->amount);
         $request->validate($rules);
+
 
         $invoice->update([
             'status' => $request->status,
