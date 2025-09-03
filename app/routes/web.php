@@ -43,7 +43,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/cobrancas/autorizar', [\App\Http\Controllers\AuthorizationController::class, 'listarParaCobranca'])->name('cobrancas.autorizar');
     Route::get('/cobrancas/{invoice}/editar', [InvoiceController::class, 'edit'])->name('cobrancas.edit');
     Route::put('/cobrancas/{invoice}', [InvoiceController::class, 'update'])->name('cobrancas.update');
-
+    Route::delete('autorizacoes/{authorization}/modalidades/{modality}', [AuthorizationController::class, 'removeModality'])
+        ->name('autorizacoes.modalidades.destroy');
 
     // 📊 Relatórios e Dashboards
     Route::get('/cobrancas/resumo', [BillingSummaryController::class, 'index'])->name('cobrancas.resumo');
