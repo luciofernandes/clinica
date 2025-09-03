@@ -29,9 +29,13 @@
         <i class="fas fa-file-upload"></i> Importar CSV
     </a>
 
-    <a href="{{ route('pacientes.deletar') }}" class="btn btn-warning mb-2">
-        <i class="fas fa-trash-alt"></i> Excluir
-    </a>
+    <form action="{{ route('pacientes.deletar') }}" method="POST" onsubmit="return confirm('Tem certeza que deseja excluir os pacientes sem autorização?')">
+        @csrf
+        @method('DELETE')
+        <button type="submit" class="btn btn-danger mb-2">
+            <i class="fas fa-trash-alt "></i> Excluir
+        </button>
+    </form>
     <table class="table table-bordered table-hover">
         <thead>
         <tr>
