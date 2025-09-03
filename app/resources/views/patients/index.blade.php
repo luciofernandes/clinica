@@ -29,6 +29,9 @@
         <i class="fas fa-file-upload"></i> Importar CSV
     </a>
 
+    <a href="{{ route('pacientes.deletar') }}" class="btn btn-warning mb-2">
+        <i class="fas fa-trash-alt"></i> Excluir
+    </a>
     <table class="table table-bordered table-hover">
         <thead>
         <tr>

@@ -41,4 +41,16 @@ class PatientController extends Controller
 
         return redirect()->route('pacientes.index')->with('status', 'Paciente cadastrado com sucesso!');
     }
+
+    public function delete()
+    {
+        // Encontra pacientes sem autorizações
+        $patientsWithoutAuthorizations = \App\Models\Patient::doesntHave('authorizations')->get();
+
+        // Deleta os pacientes encontrados
+        $deletedCount = $patientsWithoutAuthorizations->each->delete();
+
+        // Retorna uma mensagem de sucesso
+        return redirect()->route('pacientes.index')->with('status', "{$deletedCount->count()} pacientes sem autorizações foram deletados com sucesso!");
+    }
 }

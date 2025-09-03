@@ -16,4 +16,9 @@ class Patient extends Model
         'created_by',
         'updated_by',
     ];
+
+    public function authorizations()
+    {
+        return $this->hasMany(\App\Models\Authorization::class);
+    }
 }
