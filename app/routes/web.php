@@ -30,7 +30,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/pacientes', [PatientController::class, 'index'])->name('pacientes.index');
     Route::get('/pacientes/novo', [PatientController::class, 'create'])->name('pacientes.create');
     Route::post('/pacientes', [PatientController::class, 'store'])->name('pacientes.store');
-    Route::delete('/pacientes/deletar', [PatientController::class, 'delete'])->name('pacientes.delete');
+    Route::delete('/pacientes/deletar', [PatientController::class, 'delete'])->name('pacientes.deletar');
 
     // 🗂️ Autorizações
     Route::resource('autorizacoes', AuthorizationController::class);
