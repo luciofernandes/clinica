@@ -61,6 +61,6 @@ class BillingImport implements ToCollection, WithHeadingRow
         }
 
         // Substitui vírgulas por pontos e converte para float
-        return (float) str_replace(',', '.', $value);
+        return (float) str_replace(['.', ','], ['', '.'], $value);
     }
 }
