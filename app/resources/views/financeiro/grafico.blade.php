@@ -13,6 +13,13 @@
             <div class="col-sm-2">
                 <input type="number" name="ano" id="ano" class="form-control" value="{{ $ano }}">
             </div>
+            <label for="tipo_data" class="col-sm-2 col-form-label">Tipo de Data:</label>
+            <div class="col-sm-3">
+                <select name="tipo_data" id="tipo_data" class="form-control">
+                    <option value="referencia" {{ request('tipo_data') == 'referencia' ? 'selected' : '' }}>Data de Referência</option>
+                    <option value="pagamento" {{ request('tipo_data') == 'pagamento' ? 'selected' : '' }}>Data de Pagamento</option>
+                </select>
+            </div>
             <div class="col-sm-2">
                 <button type="submit" class="btn btn-primary">Filtrar</button>
             </div>

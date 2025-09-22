@@ -20,11 +20,20 @@ class FinanceController extends Controller
             ->groupBy('mes')
             ->pluck('total', 'mes');
 
-        $recebido = DB::table('receipts')
-            ->select(DB::raw('mes'), DB::raw('SUM(valor_pagorec) as total'))
-            ->where('ano', $ano)
-            ->groupBy('mes')
-            ->pluck('total', 'mes');
+        if ($request->input('tipo_data') === 'referencia') {
+            $recebido = DB::table('receipts')
+                ->select(DB::raw('mes_ref'), DB::raw('SUM(valor_pagorec) as total'))
+                ->where('ano_ref', $ano)
+                ->groupBy('mes_ref')
+                ->pluck('total', 'mes_ref');
+        } else {
+
+            $recebido = DB::table('receipts')
+                ->select(DB::raw('mes'), DB::raw('SUM(valor_pagorec) as total'))
+                ->where('ano', $ano)
+                ->groupBy('mes')
+                ->pluck('total', 'mes');
+        }
 
         $meses = collect(range(1, 12));
 
