@@ -40,7 +40,8 @@ class   UserController extends Controller
 //            'email' => 'required|string|email|max:255|unique:users',
 //            'password' => 'required|string|min:8|confirmed',
 //        ]);
-
+var_dump($request->all());
+exit();
         // Criação do usuário
         $user = \App\Models\User::create([
             'name' => $request['name'],

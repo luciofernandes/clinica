@@ -5,8 +5,9 @@
       <sourceFolder url="file://$MODULE_DIR$/app/app" isTestSource="false" packagePrefix="App\" />
       <sourceFolder url="file://$MODULE_DIR$/app/database/factories" isTestSource="false" packagePrefix="Database\Factories\" />
       <sourceFolder url="file://$MODULE_DIR$/app/database/seeders" isTestSource="false" packagePrefix="Database\Seeders\" />
-      <sourceFolder url="file://$MODULE_DIR$/app/tests" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/app/tests" isTestSource="true" packagePrefix="Tests\" />
+      <sourceFolder url="file://$MODULE_DIR$/spec" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/tests" isTestSource="true" />
       <excludeFolder url="file://$MODULE_DIR$/app/vendor/almasaeed2010/adminlte" />
       <excludeFolder url="file://$MODULE_DIR$/app/vendor/brick/math" />
       <excludeFolder url="file://$MODULE_DIR$/app/vendor/carbonphp/carbon-doctrine-types" />
@@ -122,6 +123,12 @@
       <excludeFolder url="file://$MODULE_DIR$/app/vendor/vlucas/phpdotenv" />
       <excludeFolder url="file://$MODULE_DIR$/app/vendor/voku/portable-ascii" />
       <excludeFolder url="file://$MODULE_DIR$/app/vendor/webmozart/assert" />
+      <excludeFolder url="file://$MODULE_DIR$/app/vendor/ezyang/htmlpurifier" />
+      <excludeFolder url="file://$MODULE_DIR$/app/vendor/maatwebsite/excel" />
+      <excludeFolder url="file://$MODULE_DIR$/app/vendor/maennchen/zipstream-php" />
+      <excludeFolder url="file://$MODULE_DIR$/app/vendor/markbaker/complex" />
+      <excludeFolder url="file://$MODULE_DIR$/app/vendor/markbaker/matrix" />
+      <excludeFolder url="file://$MODULE_DIR$/app/vendor/phpoffice/phpspreadsheet" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

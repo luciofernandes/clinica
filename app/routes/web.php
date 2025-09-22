@@ -1,11 +1,14 @@
 <?php
 
 use App\Http\Controllers\AuthorizationController;
+use App\Http\Controllers\BillingImportController;
 use App\Http\Controllers\BillingSummaryController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\FinanceController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\PatientController;
 use App\Http\Controllers\PatientImportController;
+use App\Http\Controllers\ReceiptController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -54,5 +57,15 @@ Route::middleware('auth')->group(function () {
     Route::get('/usuarios/create', [\App\Http\Controllers\UserController::class, 'create'])->name('user.create');
     Route::post('/usuarios ', [\App\Http\Controllers\UserController::class, 'store'])->name('user.store');
     Route::delete('/usuarios/{user}/destroy', [\App\Http\Controllers\UserController::class, 'destroy'])->name('user.destroy');
+
+
+    Route::get('/billing/import', [BillingImportController::class, 'showForm'])->name('billing.form');
+    Route::post('/billing/import', [BillingImportController::class, 'import'])->name('billing.import');
+
+
+    Route::get('/receipt/import', [ReceiptController::class, 'showForm'])->name('receipt.form');
+    Route::post('/receipt/import', [ReceiptController::class, 'import'])->name('receipt.import');
+
+    Route::get('/financeiro/grafico', [FinanceController::class, 'graficoAnual'])->name('financeiro.grafico');
 
 });

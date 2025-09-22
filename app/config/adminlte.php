@@ -438,6 +438,27 @@ return [
             'url'  => 'cobrancas/resumo',
             'icon' => 'fas fa-file-invoice-dollar',
         ],
+
+        // Importar Cobranças
+        [
+            'text' => 'Importar Mensalidades',
+            'url'  => 'billing/import',
+            'icon' => 'fas fa-file-upload',
+        ],
+
+        //Importar Contas a redeber
+        [
+            'text' => 'Importar Recebimentos',
+            'url'  => 'receipt/import',
+            'icon' => 'fas fa-file-upload',
+        ],
+
+        // Financeiro
+        [
+            'text' => 'Gráfico Financeiro',
+            'url'  => 'financeiro/grafico',
+            'icon' => 'fas fa-chart-bar',
+        ]
     ],
 
     /*

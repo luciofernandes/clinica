@@ -12,8 +12,11 @@ RUN apt-get update && apt-get install -y \
     libpng-dev \
     libjpeg-dev \
     libfreetype6-dev \
-    && docker-php-ext-configure zip \
+    && docker-php-ext-configure zip  \
     && docker-php-ext-install pdo_mysql zip mbstring exif pcntl
+
+RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
+    && docker-php-ext-install gd
 
 # Instalar Node.js 20.x
 RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
