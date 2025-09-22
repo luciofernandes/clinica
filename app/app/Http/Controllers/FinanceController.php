@@ -39,10 +39,14 @@ class FinanceController extends Controller
 
 
         $dados = $meses->map(function ($mes) use ($faturado, $recebido) {
+            $f = floatval($faturado[$mes] ?? 0);
+            $r = floatval($recebido[$mes] ?? 0);
             return [
                 'mes' => $mes,
-                'faturado' => $faturado[$mes] ?? 0,
-                'recebido' => $recebido[$mes] ?? 0,
+                'faturado' => $f,
+                'recebido' => $r,
+                'diferenca' => abs($f - $r),
+                'cor' => $r >= $f ? 'blue' : 'red',
             ];
         });
 
@@ -50,6 +54,8 @@ class FinanceController extends Controller
             'dados' => $dados,
             'faturadoArray' => $dados->pluck('faturado')->values()->all(),
             'recebidoArray' => $dados->pluck('recebido')->values()->all(),
+            'diferencaArray' => $dados->pluck('diferenca')->values()->all(),
+            'coresDiferenca' => $dados->pluck('cor')->values()->all(),
             'mesesArray' => $dados->pluck('mes')->values()->all(),
             'ano' => $ano,
         ]);

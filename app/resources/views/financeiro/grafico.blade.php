@@ -37,39 +37,48 @@
         const chart = new Chart(ctx, {
             type: 'bar',
             data: {
-                labels: @json($dados->pluck('mes')),
+                labels: @json($mesesArray),
                 datasets: [
                     {
                         label: 'Faturado',
-                        backgroundColor: 'rgba(54, 162, 235, 0.7)',
-                        data: @json($dados->pluck('faturado')),
+                        data: @json($faturadoArray),
+                        backgroundColor: 'rgba(54, 162, 235, 0.7)'
                     },
                     {
                         label: 'Recebido',
-                        backgroundColor: 'rgba(75, 192, 192, 0.7)',
-                        data: @json($dados->pluck('recebido')),
+                        data: @json($recebidoArray),
+                        backgroundColor: 'rgba(75, 192, 192, 0.7)'
+                    },
+                    {
+                        label: 'Diferença',
+                        data: @json($diferencaArray),
+                        backgroundColor: @json($coresDiferenca),
+                        type: 'bar',
+                        stack: 'Stack 1'
                     }
                 ]
             },
             options: {
-                responsive: true,
                 plugins: {
-                    title: {
-                        display: false
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return `${context.dataset.label}: R$ ${parseFloat(context.raw).toFixed(2)}`;
+                            }
+                        }
+                    },
+                    legend: {
+                        position: 'top'
                     }
                 },
+                responsive: true,
                 scales: {
                     y: {
                         beginAtZero: true,
-                        title: {
-                            display: true,
-                            text: 'R$ Valor (Reais)'
-                        }
-                    },
-                    x: {
-                        title: {
-                            display: true,
-                            text: 'Mês'
+                        ticks: {
+                            callback: function(value) {
+                                return 'R$ ' + value;
+                            }
                         }
                     }
                 }
