@@ -15,7 +15,7 @@ class FinanceController extends Controller
         $ano = $request->input('ano', now()->year);
 
         $faturado = DB::table('billings')
-            ->select(DB::raw(' mes'), DB::raw('SUM(valor_pago) as total'))
+            ->select(DB::raw(' mes'), DB::raw('SUM(valor_mes) as total'))
             ->where('ano', $ano)
             ->groupBy('mes')
             ->pluck('total', 'mes');
