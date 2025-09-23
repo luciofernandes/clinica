@@ -32,7 +32,7 @@ class CommissionsImport implements ToCollection
             $modalityName = trim($row[1]);
             $qtdMatriculas = (int) $row[2];
             $qtdSessoes = (int) $row[3];
-            $valorComissao = (float) str_replace(',', '.', $row[4]);
+            $valorComissao = $this->convertToDecimal($row[4]);
 
 
             if ($valorComissao <= 0) continue;
@@ -62,5 +62,15 @@ class CommissionsImport implements ToCollection
 //            $table->integer('qtd_sessoes');
 //            $table->decimal('valor_comissao', 10, 2);
         }
+    }
+
+    private function convertToDecimal($value)
+    {
+        if (is_null($value)) {
+            return null;
+        }
+
+        // Substitui vírgulas por pontos e converte para float
+        return (float) str_replace(['.', ','], ['', '.'], $value);
     }
 }
