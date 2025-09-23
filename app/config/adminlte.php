@@ -453,12 +453,31 @@ return [
             'icon' => 'fas fa-file-upload',
         ],
 
+
+        // Comissões
+        [
+            'text' => 'Importar Comissões',
+            'url'  => 'comissoes/importar',
+            'icon' => 'fas fa-file-upload',
+        ],
+
         // Financeiro
         [
             'text' => 'Gráfico Financeiro',
             'url'  => 'financeiro/grafico',
             'icon' => 'fas fa-chart-bar',
-        ]
+        ],
+
+        //Financeiro Resumo
+        [
+            'text' => 'Resumo Financeiro',
+            'url'  => 'financeiro/resumo',
+            'icon' => 'fas fa-calculator',
+        ],
+
+
+
+
     ],
 
     /*

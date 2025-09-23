@@ -67,5 +67,10 @@ Route::middleware('auth')->group(function () {
     Route::post('/receipt/import', [ReceiptController::class, 'import'])->name('receipt.import');
 
     Route::get('/financeiro/grafico', [FinanceController::class, 'graficoAnual'])->name('financeiro.grafico');
+    Route::get('/financeiro/resumo', [\App\Http\Controllers\FinanceController::class, 'resumoMensal'])->name('financeiro.resumo');
+
+
+    Route::get('/comissoes/importar', [\App\Http\Controllers\CommissionController::class, 'showForm']  )->name('comissoes.form');
+    Route::post('/comissoes/importar', [\App\Http\Controllers\CommissionController::class, 'importarComissoes']  )->name('comissoes.import');
 
 });

@@ -62,4 +62,53 @@ class FinanceController extends Controller
 
 
     }
+
+    public function resumoMensal(Request $request)
+    {
+        abort_unless(auth()->user()?->is_admin, 403);
+        $ano = $request->input('ano', now()->year);
+
+        // Tabela billings
+        $faturamento = DB::table('billings')
+            ->selectRaw('ano, mes, SUM(valor_mes) as total_faturado')
+            ->where('ano', $ano)
+            ->groupBy('ano', 'mes');
+
+        // Tabela receipts
+        $recebimentos = DB::table('receipts')
+            ->selectRaw('ano, mes, SUM(valor_pagorec) as total_recebido')
+            ->where('ano', $ano)
+            ->groupBy('ano', 'mes');
+
+        // Tabela commissions
+        $comissoes = DB::table('commissions')
+            ->selectRaw('ano, mes, SUM(valor_comissao) as total_comissao')
+            ->where('ano', $ano)
+            ->groupBy('ano', 'mes');
+
+        // Unir os dados via subquery
+        $dados = DB::table(DB::raw("({$faturamento->toSql()}) as faturamento"))
+            ->mergeBindings($faturamento)
+            ->leftJoinSub($recebimentos, 'recebimentos', function ($join) {
+                $join->on('faturamento.ano', '=', 'recebimentos.ano')
+                    ->on('faturamento.mes', '=', 'recebimentos.mes');
+            })
+            ->leftJoinSub($comissoes, 'comissoes', function ($join) {
+                $join->on('faturamento.ano', '=', 'comissoes.ano')
+                    ->on('faturamento.mes', '=', 'comissoes.mes');
+            })
+            ->select(
+                'faturamento.ano',
+                'faturamento.mes',
+                DB::raw('COALESCE(faturamento.total_faturado, 0) as total_faturado'),
+                DB::raw('COALESCE(recebimentos.total_recebido, 0) as total_recebido'),
+                DB::raw('COALESCE(comissoes.total_comissao, 0) as total_comissao')
+            )
+            ->orderByDesc('faturamento.ano')
+            ->orderByDesc('faturamento.mes')
+            ->get();
+
+        return view('financeiro.resumo', compact('dados'));
+    }
+
 }
