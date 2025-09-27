@@ -169,8 +169,6 @@ class AuthorizationController extends Controller
 
     public function update(Request $request, $id)
     {
-        var_dump("Update Authorization" . $id  . " " . auth()->id()  . " " . $request->authorization_date);
-
             $authorization = \App\Models\Authorization::findOrFail($id);
 
             $request->validate([
