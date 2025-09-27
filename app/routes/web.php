@@ -37,7 +37,7 @@ Route::middleware('auth')->group(function () {
 
     // 🗂️ Autorizações
     Route::resource('autorizacoes', AuthorizationController::class);
-
+    Route::put('/autorizacoes/{autorizacao}', [AuthorizationController::class, 'update'])->name('autorizacoes.update');
     // 💸 Cobranças e Notas Fiscais
     Route::get('/autorizacoes/{authorization}/cobrancas', [InvoiceController::class, 'index'])->name('cobrancas.index');
     Route::post('/autorizacoes/{authorization}/cobrancas', [InvoiceController::class, 'store'])->name('cobrancas.store');

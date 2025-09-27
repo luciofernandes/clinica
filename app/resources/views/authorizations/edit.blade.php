@@ -23,6 +23,30 @@
             container.appendChild(clone);
             index++;
         });
+
+        function removerModalidade(authId, modalityId) {
+            if (confirm('Tem certeza que deseja remover esta modalidade?')) {
+                const form = document.createElement('form');
+                form.method = 'POST';
+                form.action = `/autorizacoes/${authId}/modalidades/${modalityId}`;
+
+                const csrf = document.createElement('input');
+                csrf.type = 'hidden';
+                csrf.name = '_token';
+                csrf.value = '{{ csrf_token() }}';
+
+                const method = document.createElement('input');
+                method.type = 'hidden';
+                method.name = '_method';
+                method.value = 'DELETE';
+
+                form.appendChild(csrf);
+                form.appendChild(method);
+
+                document.body.appendChild(form);
+                form.submit();
+            }
+        }
     </script>
 @endsection
 @section('content_header')
@@ -30,7 +54,17 @@
 @endsection
 
 @section('content')
-    <form action="{{ route('autorizacoes.update', $authorization->id) }}" method="POST" enctype="multipart/form-data">
+    @if ($errors->any())
+        <div class="alert alert-danger">
+            <strong>Erro!</strong> Corrija os seguintes campos:
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+    <form action="{{ route('autorizacoes.update', $authorization->id) }}" method="POST">
         @csrf
         @method('PUT')
         <div class="form-group">
@@ -170,13 +204,19 @@
 {{--                                    <i class="fas fa-trash"></i>--}}
 {{--                                </button>--}}
 
-                                    <form action="{{ route('autorizacoes.modalidades.destroy', [$authorization->id, $modality->id]) }}" method="POST" onsubmit="return confirm('Tem certeza que deseja remover esta modalidade?')">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-sm btn-danger" title="Remover">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
-                                    </form>
+{{--                                    <form action="{{ route('autorizacoes.modalidades.destroy', [$authorization->id, $modality->id]) }}" method="POST" onsubmit="return confirm('Tem certeza que deseja remover esta modalidade?')">--}}
+{{--                                        @csrf--}}
+{{--                                        @method('DELETE')--}}
+{{--                                        <button type="submit" class="btn btn-sm btn-danger" title="Remover">--}}
+{{--                                            <i class="fas fa-trash"></i>--}}
+{{--                                        </button>--}}
+{{--                                    </form>--}}
+                                    <button type="button"
+                                            class="btn btn-sm btn-danger"
+                                            onclick="removerModalidade({{ $authorization->id }}, {{ $modality->id }})"
+                                            title="Remover">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
 
                             @endif
                             </div>
@@ -206,6 +246,6 @@
             </ul>
         @endif
 
-        <button class="btn btn-primary">Salvar Alterações</button>
+        <button type="submit" class="btn btn-primary">Salvar Alterações</button>
     </form>
 @endsection

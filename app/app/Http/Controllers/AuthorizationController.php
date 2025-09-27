@@ -179,7 +179,7 @@ class AuthorizationController extends Controller
                 'modalities.*.modality_id' => 'required|exists:modalities,id',
                 'modalities.*.quantity_type' => 'required',
                 'modalities.*.quantity' => 'required|integer',
-                'files.*' => 'file|mimes:pdf,jpg,jpeg,png|max:2048',
+             //   'files.*' => 'file|mimes:pdf,jpg,jpeg,png|max:2048',
             ]);
 
 
