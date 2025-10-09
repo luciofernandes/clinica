@@ -72,6 +72,16 @@
 
 
 @section('content')
+    @if ($errors->any())
+        <div class="alert alert-danger">
+            <strong>Erros encontrados:</strong>
+            <ul>
+                @foreach ($errors->all() as $erro)
+                    <li>{{ $erro }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
     <form action="{{ route('autorizacoes.store') }}" method="POST" enctype="multipart/form-data">
         @csrf
 
