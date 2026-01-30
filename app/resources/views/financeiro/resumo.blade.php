@@ -20,6 +20,25 @@
             🧾 Importar Comissões
         </a>
     </div>
+
+    <form class="row g-3 mb-4" method="GET" action="{{ route('financeiro.resumo') }}">
+        <div class="col-auto">
+            <label class="visually-hidden" for="ano">Ano</label>
+            <input
+                type="number"
+                class="form-control"
+                id="ano"
+                name="ano"
+                placeholder="Ano"
+                value="{{ request('ano', now()->year) }}"
+                min="2000"
+                max="{{ now()->year + 1 }}"
+            >
+        </div>
+        <div class="col-auto">
+            <button type="submit" class="btn btn-outline-primary">Filtrar</button>
+        </div>
+    </form>
     <table class="table table-bordered table-striped">
         <thead>
         <tr>
