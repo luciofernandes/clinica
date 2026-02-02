@@ -64,8 +64,9 @@
         <tr>
             <th>Nº NF</th>
             <th>Valor</th>
+            <th>Data Pagamento</th>
             <th>Status</th>
-            <th>Data</th>
+            <th>Data Nota</th>
             <th>Modalidades</th>
             <th>Ações</th>
         </tr>
@@ -95,9 +96,9 @@
                     <div class="col-md-12">
 
                         <div class="d-flex flex-wrap">
-                            @foreach ($authorization->modalities as $modality)
+                            @foreach ($invoice->authorizationModalities as $modality)
                                 <div class="form-check me-4">
-                                    <label class="form-check-label" for="modality{{ $modality->id }}">
+                                    <label class="form-check-label" for="invoice{{ $invoice->id }}-modality{{ $modality->id }}">
                                         {{ $modality->modality->name }} - {{ $modality->quantity }} {{ $modality->quantity_type }}
                                     </label>
                                 </div>

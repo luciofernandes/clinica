@@ -13,7 +13,11 @@ class InvoiceController extends Controller
 
     public function index(Authorization $authorization)
     {
-        $invoices = $authorization->invoices()->orderByDesc('issue_date')->get();
+        $invoices = $authorization
+            ->invoices()
+            ->with(['authorizationModalities.modality'])
+            ->orderByDesc('issue_date')
+            ->get();
         return view('invoices.index', compact('authorization', 'invoices'));
     }
 
