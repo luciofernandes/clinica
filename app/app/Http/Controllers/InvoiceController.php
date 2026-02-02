@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Authorization;
 use App\Models\Invoice;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 
 class InvoiceController extends Controller
@@ -20,7 +21,10 @@ class InvoiceController extends Controller
     {
 
         $request->validate([
-            'invoice_number' => 'required|unique:invoices',
+            'invoice_number' => [
+                'required',
+                Rule::unique('invoices')->where(fn ($query) => $query->where('authorization_id', $authorization->id)),
+            ],
             'amount' => 'required|numeric',
             'issue_date' => 'required|date',
             'authorization_modality_ids' => 'required|array|min:1',
