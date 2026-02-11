@@ -97,7 +97,7 @@ class BillingImportController extends Controller
             ];
 
             $file = $request->file('file');
-            Excel::import(new BillingImport, $file->getRealPath(), null, \Maatwebsite\Excel\Excel::CSV, $config);
+            Excel::import(new BillingImport($request->input('tipo')), $file->getRealPath(), null, \Maatwebsite\Excel\Excel::CSV, $config);
         } catch (\Exception $e) {
             var_dump($e->getMessage());
             exit();

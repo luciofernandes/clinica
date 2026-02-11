@@ -19,6 +19,16 @@
             <input type="file" name="file" class="form-control" required>
         </div>
 
+        <div class="form-group mt-2">
+            <label for="tipo">Tipo</label>
+            <select name="tipo" id="tipo" class="form-control" required>
+                <option value="">Selecione</option>
+                <option value="ativa">Ativa</option>
+                <option value="finalizada">Finalizada</option>
+                <option value="cancelada">Cancelada</option>
+            </select>
+        </div>
+
         <button class="btn btn-primary mt-2">Importar</button>
     </form>
 @stop

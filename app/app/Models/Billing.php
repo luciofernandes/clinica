@@ -20,6 +20,7 @@ class Billing extends Model
     'forma_mensalidade',
     'num_recibo',
     'obs',
+    'tipo',
     'mes',
     'ano',
     ];

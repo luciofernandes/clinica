@@ -12,10 +12,25 @@ class BillingImport implements ToCollection, WithHeadingRow
     protected $importedMonth;
     protected $importedYear;
     protected $alreadyCleaned = false;
+    protected $tipo;
+
+    public function __construct(string $tipo)
+    {
+        $this->tipo = $tipo;
+    }
 
     public function collection(Collection $rows)
     {
         foreach ($rows as $row) {
+
+            $valorPago = $this->convertToDecimal($row['valor_pago']);
+
+            // Para tipos finalizada/cancelada só importamos registros pagos
+            if (in_array($this->tipo, ['finalizada', 'cancelada'], true)) {
+                if (is_null($valorPago) || $valorPago <= 0) {
+                    continue;
+                }
+            }
 
             if (!$this->alreadyCleaned) {
                 // Extrai a data de vencimento
@@ -26,6 +41,7 @@ class BillingImport implements ToCollection, WithHeadingRow
                 // Remove dados do mesmo mês/ano
                 Billing::whereMonth('data_venc', $this->importedMonth)
                     ->whereYear('data_venc', $this->importedYear)
+                    ->where('tipo', $this->tipo)
                     ->delete();
 
                 $this->alreadyCleaned = true;
@@ -42,12 +58,13 @@ class BillingImport implements ToCollection, WithHeadingRow
                 'valor_mes'          => $this->convertToDecimal($row['valor_mes']),
                 'valor_desconto'     => $this->convertToDecimal($row['valor_desconto']),
                 'valor_com_desconto' => $this->convertToDecimal($row['valor_com_desconto']),
-                'valor_pago'         => $this->convertToDecimal($row['valor_pago']),
+                'valor_pago'         => $valorPago,
                 'modalidade'         => $row['modalidade'],
                 'tipo_matricula'     => $row['tipo_matricula'],
                 'forma_mensalidade'  => $row['forma_mensalidade'],
                 'num_recibo'         => $row['num_recibo'],
                 'obs'                => $row['obs'] ?? null,
+                'tipo'               => $this->tipo,
                 'mes'                => $mes,
                 'ano'                => $ano,
             ]);

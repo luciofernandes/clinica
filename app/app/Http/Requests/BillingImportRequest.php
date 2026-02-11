@@ -23,6 +23,7 @@ class BillingImportRequest extends FormRequest
     {
         return [
             'file' => 'required|file|mimes:csv,txt|max:2048',
+            'tipo' => 'required|in:ativa,finalizada,cancelada',
         ];
     }
 }
